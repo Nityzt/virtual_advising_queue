@@ -21,7 +21,7 @@ function StudentStatus() {
 
     useEffect(() => {
         // Initialize socket connection
-        const newSocket = io("https://queue-management-app.onrender.com", {
+        const newSocket = io("https://virtual-advising-queue.onrender.com", {
             transports: ["websocket"],
         });
         setSocket(newSocket);
@@ -63,7 +63,7 @@ function StudentStatus() {
     const fetchQueueStatus = async () => {
         try {
             const studentEmail = localStorage.getItem('studentEmail');
-            const response = await fetch(`https://queue-management-app.onrender.com/api/queue/${queueId}/status`, {
+            const response = await fetch(`https://virtual-advising-queue.onrender.com/api/queue/${queueId}/status`, {
                 headers: {
                     'Content-Type': 'application/json',
                     'student-email': studentEmail
@@ -133,7 +133,7 @@ function StudentStatus() {
 
         try {
             const studentEmail = localStorage.getItem('studentEmail');
-            const response = await fetch(`https://queue-management-app.onrender.com/api/queue/${queueId}/defer`, {
+            const response = await fetch(`https://virtual-advising-queue.onrender.com/api/queue/${queueId}/defer`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -165,7 +165,7 @@ function StudentStatus() {
 
         try {
             const studentEmail = localStorage.getItem('studentEmail');
-            const response = await fetch(`https://queue-management-app.onrender.com/api/queue/${queueId}/leave`, {
+            const response = await fetch(`https://virtual-advising-queue.onrender.com/api/queue/${queueId}/leave`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

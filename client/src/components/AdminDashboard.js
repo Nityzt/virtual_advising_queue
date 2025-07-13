@@ -11,7 +11,7 @@ const AdminDashboard = () => {
     const navigate = useNavigate();
 
     // Mock API base URL - replace with your actual API
-    const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+    const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://virtual-advising-queue.onrender.com' ;
 
     useEffect(() => {
         // Check if admin is logged in
