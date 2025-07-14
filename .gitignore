@@ -17,13 +17,18 @@ server/dist/
 # Package locks
 package-lock.json
 
+
+
 # IDE files
 .idea/
 .vscode/
+.idea
 
+./.idea
 # OS files
 .DS_Store
 Thumbs.db
+./.DS_Store
 
 # Logs
 *.log
