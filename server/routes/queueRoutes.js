@@ -4,24 +4,47 @@ import QueueEntry from "../models/QueueEntry.js";
 export default (io) => {
   const router = express.Router();
 
-  // GET all entries (original route - keep for compatibility)
-  router.get("/", async (req, res) => {
-    try {
-      const entries = await QueueEntry.find().lean();
-      const cleanEntries = entries.map(e => ({
-        _id: e._id,
-        name: e.name,
-        studentId: e.studentId,
-        email: e.email || 'N/A',
-        status: e.status || 'waiting',
-        joinedAt: e.joinedAt || e.createdAt
-      }));
-      res.json(cleanEntries);
-    } catch (error) {
-      console.error('Error fetching entries:', error);
-      res.status(500).json({ error: error.message });
-    }
-  });
+// GET all entries from today (for CSV export)
+router.get("/all", async (req, res) => {
+  try {
+    const startOfDay = new Date();
+    startOfDay.setHours(0,0,0,0);
+
+    const entries = await QueueEntry.find({
+      joinedAt: { $gte: startOfDay }
+    }).sort({ joinedAt: 1 }).lean();
+
+    res.json(entries);
+  } catch (error) {
+    console.error("Error fetching all entries:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+  // GET active entries only
+router.get("/", async (req, res) => {
+  try {
+    const entries = await QueueEntry.find({
+      status: { $in: ["waiting", "deferred"] }
+    }).lean();
+
+    const cleanEntries = entries.map(e => ({
+      _id: e._id,
+      name: e.name,
+      studentId: e.studentId,
+      email: e.email || "N/A",
+      status: e.status || "waiting",
+      joinedAt: e.joinedAt || e.createdAt
+    }));
+
+    res.json(cleanEntries);
+  } catch (error) {
+    console.error("Error fetching entries:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
   // POST new entry (updated to support new fields)
   router.post("/", async (req, res) => {
@@ -224,6 +247,29 @@ export default (io) => {
       res.status(500).json({ error: error.message });
     }
   });
+
+  // POST mark as no-show (admin action)
+router.post("/:id/noshow", async (req, res) => {
+  try {
+    const entry = await QueueEntry.findById(req.params.id);
+    if (!entry) {
+      return res.status(404).json({ error: "Entry not found" });
+    }
+
+    // Mark as no-show
+    entry.status = "no-show";
+    await entry.save();
+
+    // Emit updates
+    //io.emit("queue-noshow", req.params.id); I used queue-updated for consistency.
+    io.emit("queue-updated", { queueId: entry.queueId });
+
+    res.json({ message: "Marked as no-show successfully" });
+  } catch (error) {
+    console.error("Error marking no-show:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
 
   return router;
 };

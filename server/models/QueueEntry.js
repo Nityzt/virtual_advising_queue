@@ -9,10 +9,11 @@ const QueueEntrySchema = new mongoose.Schema({
   questions: { type: String },
   queueId: { type: String, default: 'default-queue' },
   status: {
-    type: String,
-    enum: ['waiting', 'deferred', 'notified', 'completed'],
-    default: 'waiting'
-  },
+  type: String,
+  enum: ['waiting', 'deferred', 'notified', 'completed', 'no-show'],
+  default: 'waiting'
+},
+
   deferredUntil: { type: Date },
   joinedAt: { type: Date, default: Date.now },
   completedAt: { type: Date }
