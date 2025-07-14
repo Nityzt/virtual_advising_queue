@@ -5,14 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a1d884df-4a0a-48ab-be90-155e4fd79929" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/.env" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/.env.development" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/.env.local" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/.env.production" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/config/api.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/hooks/useApi.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/.env.local" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/.env.production" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/.env" beforeDir="false" afterPath="$PROJECT_DIR$/client/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/AdminDashboard.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/AdminDashboard.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/AdminDashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/AdminDashboard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/StudentDashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/StudentDashboard.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/StudentQueue.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/StudentQueue.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/StudentStatus.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/StudentStatus.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/.env" beforeDir="false" afterPath="$PROJECT_DIR$/server/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/models/QueueEntry.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/models/QueueEntry.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/routes/queueRoutes.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/queueRoutes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/server.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,7 +36,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
@@ -36,27 +49,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "feature-redesign",
-    "ignore.virus.scanning.warn.message": "true",
-    "junie.onboarding.icon.badge.shown": "true",
-    "last_opened_file_path": "C:/Users/User/Desktop/UNI/EECS PROJECT/queue-management-app-main/server",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\WebStorm 2025.1.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature-redesign&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/User/Desktop/UNI/EECS PROJECT/queue-management-app-main/server&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\WebStorm 2025.1.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\User\Desktop\UNI\EECS PROJECT\queue-management-app-main\server" />
@@ -87,7 +100,7 @@
       <workItem from="1752439855505" duration="271000" />
       <workItem from="1752442263524" duration="1224000" />
       <workItem from="1752445449221" duration="1670000" />
-      <workItem from="1752506972193" duration="3126000" />
+      <workItem from="1752506972193" duration="12633000" />
     </task>
     <servers />
   </component>

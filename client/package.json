@@ -16,7 +16,10 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start:local": "REACT_APP_API_URL=http://localhost:5001 react-scripts start",
+    "start:prod": "REACT_APP_API_URL=https://virtual-advising-queue.onrender.com react-scripts start",
     "build": "react-scripts build",
+    "build:local": "REACT_APP_API_URL=http://localhost:5001 react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

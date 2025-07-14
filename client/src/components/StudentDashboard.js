@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom'; // Removed unused Link import
 import './StudentDashboard.css';
 
 const StudentDashboard = () => {
@@ -8,8 +8,8 @@ const StudentDashboard = () => {
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
-    // Mock queue data - replace with actual API call
-    const mockQueues = [
+    // Use useMemo for mockQueues to prevent recreation
+    const mockQueues = useMemo(() => [
         {
             id: 'academic-advising',
             name: 'Academic Advising',
@@ -46,7 +46,21 @@ const StudentDashboard = () => {
             isOpen: false,
             advisors: ['Mark Davis']
         }
-    ];
+    ], []);
+
+    // Use useCallback to memoize the function
+    const loadAvailableQueues = useCallback(async () => {
+        setIsLoading(true);
+        try {
+            // Simulate API call
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            setAvailableQueues(mockQueues);
+        } catch (error) {
+            console.error('Error loading queues:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    }, [mockQueues]); // Now mockQueues is stable thanks to useMemo
 
     useEffect(() => {
         // Check if student is logged in
@@ -67,20 +81,7 @@ const StudentDashboard = () => {
 
         // Load available queues
         loadAvailableQueues();
-    }, [navigate]);
-
-    const loadAvailableQueues = async () => {
-        setIsLoading(true);
-        try {
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            setAvailableQueues(mockQueues);
-        } catch (error) {
-            console.error('Error loading queues:', error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    }, [navigate, loadAvailableQueues]);
 
     const handleJoinQueue = (queueId) => {
         navigate(`/student-queue/${queueId}`);
@@ -131,8 +132,8 @@ const StudentDashboard = () => {
                                 <div className="queue-header">
                                     <h3>{queue.name}</h3>
                                     <span className={`queue-status ${queue.isOpen ? 'open' : 'closed'}`}>
-                    {queue.isOpen ? 'Open' : 'Closed'}
-                  </span>
+                                        {queue.isOpen ? 'Open' : 'Closed'}
+                                    </span>
                                 </div>
 
                                 <p className="queue-description">{queue.description}</p>
@@ -151,8 +152,8 @@ const StudentDashboard = () => {
                                 <div className="queue-advisors">
                                     <span className="advisors-label">Advisors:</span>
                                     <span className="advisors-list">
-                    {queue.advisors.join(', ')}
-                  </span>
+                                        {queue.advisors.join(', ')}
+                                    </span>
                                 </div>
 
                                 <button

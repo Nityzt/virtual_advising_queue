@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './StudentQueue.css';
 
 const StudentQueue = () => {
-    const { queueId } = useParams();
+    const { queueId } = useParams(); // ✅ Extract queueId from URL
     const navigate = useNavigate();
     const [studentInfo, setStudentInfo] = useState(null);
     const [queueInfo, setQueueInfo] = useState(null);
@@ -17,13 +17,13 @@ const StudentQueue = () => {
     const [currentQueueLength, setCurrentQueueLength] = useState(0);
 
     // Mock API base URL
-    const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://virtual-advising-queue.onrender.com' || 'http://localhost:5001';
+    const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://virtual-advising-queue.onrender.com';
 
-    // Mock queue data - in real app, this would come from your backend
-    const mockQueues = {
-        'general-advising': {
-            id: 'general-advising',
-            name: 'General Academic Advising',
+    // ✅ FIXED: Use the exact same queue IDs as AdminDashboard expects
+    const mockQueues = useMemo(() => ({
+        'academic-advising': {
+            id: 'academic-advising',
+            name: 'Academic Advising',
             description: 'Get help with course selection, degree planning, and academic requirements.',
             estimatedWaitTime: 15,
             isOpen: true,
@@ -47,10 +47,45 @@ const StudentQueue = () => {
             isOpen: true,
             advisorName: 'Lisa Rodriguez',
             location: 'Financial Aid Office, Room 150'
+        },
+        'general-advising': {
+            id: 'general-advising',
+            name: 'General Academic Advising',
+            description: 'Get help with course selection, degree planning, and academic requirements.',
+            estimatedWaitTime: 15,
+            isOpen: true,
+            advisorName: 'Dr. Sarah Johnson',
+            location: 'Student Services Building, Room 201'
+        },
+        'registration-help': {
+            id: 'registration-help',
+            name: 'Registration Help',
+            description: 'Course registration and enrollment assistance.',
+            estimatedWaitTime: 10,
+            isOpen: false,
+            advisorName: 'Mark Davis',
+            location: 'Registrar Office, Room 120'
         }
-    };
+    }), []);
+
+    const loadCurrentQueueLength = useCallback(async () => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/queue`);
+            if (response.ok) {
+                const data = await response.json();
+                // ✅ Filter by current queueId to get accurate count
+                const currentQueueEntries = data.filter(entry => entry.queueId === queueId);
+                setCurrentQueueLength(currentQueueEntries.length);
+            }
+        } catch (error) {
+            console.error('Error loading queue length:', error);
+        }
+    }, [API_BASE_URL, queueId]);
 
     useEffect(() => {
+        // ✅ Debug: Log the queueId from URL
+        console.log('🔍 StudentQueue - queueId from URL:', queueId);
+
         // Check if student is logged in
         const storedStudentInfo = localStorage.getItem('studentInfo');
         if (!storedStudentInfo) {
@@ -70,26 +105,17 @@ const StudentQueue = () => {
         // Load queue information
         const queue = mockQueues[queueId];
         if (!queue) {
+            console.error('❌ Queue not found:', queueId);
             navigate('/student-dashboard');
             return;
         }
+
+        console.log('✅ Queue found:', queue);
         setQueueInfo(queue);
 
         // Load current queue length
         loadCurrentQueueLength();
-    }, [queueId, navigate]);
-
-    const loadCurrentQueueLength = async () => {
-        try {
-            const response = await fetch(`${API_BASE_URL}/api/queue`);
-            if (response.ok) {
-                const data = await response.json();
-                setCurrentQueueLength(data.length);
-            }
-        } catch (error) {
-            console.error('Error loading queue length:', error);
-        }
-    };
+    }, [queueId, navigate, mockQueues, loadCurrentQueueLength]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -104,17 +130,20 @@ const StudentQueue = () => {
         setIsSubmitting(true);
 
         try {
-            // Create queue entry
+            // ✅ FIXED: Create queue entry with proper field names and queueId
             const queueEntry = {
                 name: studentInfo.fullName,
-                studentId: formData.studentId, // Using email as studentId for now
+                studentId: formData.studentId,
                 email: studentInfo.email,
-                phoneNumber: formData.phoneNumber,
-                advisingQuestions: formData.advisingQuestions,
-                urgencyLevel: formData.urgencyLevel,
-                queueId: queueId,
+                phone: formData.phoneNumber,           // ✅ FIXED: phone not phoneNumber
+                questions: formData.advisingQuestions, // ✅ FIXED: questions not advisingQuestions
+                queueId: queueId,                      // ✅ CRITICAL: Include queueId from URL
                 joinedAt: new Date().toISOString()
             };
+
+            // ✅ Debug logging
+            console.log('🔍 Queue ID from URL:', queueId);
+            console.log('🔍 Submitting queue entry:', queueEntry);
 
             const response = await fetch(`${API_BASE_URL}/api/queue`, {
                 method: 'POST',
@@ -126,6 +155,7 @@ const StudentQueue = () => {
 
             if (response.ok) {
                 const result = await response.json();
+                console.log('✅ Server response:', result);
 
                 // Store queue entry info for status page
                 localStorage.setItem('currentQueueEntry', JSON.stringify({
@@ -138,10 +168,11 @@ const StudentQueue = () => {
                 navigate(`/student-status/${queueId}`);
             } else {
                 const error = await response.json();
+                console.error('❌ Server error:', error);
                 alert(`Failed to join queue: ${error.error || 'Unknown error'}`);
             }
         } catch (error) {
-            console.error('Error joining queue:', error);
+            console.error('❌ Error joining queue:', error);
             alert('Error joining queue. Please try again.');
         } finally {
             setIsSubmitting(false);
@@ -182,7 +213,7 @@ const StudentQueue = () => {
                     ← Back to Dashboard
                 </button>
                 <div className="student-welcome">
-                    <h1>Join Queue</h1>
+                    <h1>Join Queue: {queueInfo.name}</h1>
                     <p className="student-email">Logged in as: {studentInfo.email}</p>
                 </div>
             </div>
@@ -193,6 +224,10 @@ const StudentQueue = () => {
                     <p className="queue-description">{queueInfo.description}</p>
 
                     <div className="queue-details">
+                        <div className="detail-item">
+                            <span className="detail-label">Queue ID:</span>
+                            <span className="detail-value">{queueId}</span>
+                        </div>
                         <div className="detail-item">
                             <span className="detail-label">Advisor:</span>
                             <span className="detail-value">{queueInfo.advisorName}</span>
@@ -230,7 +265,7 @@ const StudentQueue = () => {
                 <div className="join-form-card">
                     <h3>Join Queue</h3>
                     <p className="form-description">
-                        Please provide the following information to join the queue. Your name and email are pre-filled from your login.
+                        Please provide the following information to join the {queueInfo.name} queue. Your name and email are pre-filled from your login.
                     </p>
 
                     <form onSubmit={handleSubmit} className="join-form">
@@ -334,7 +369,7 @@ const StudentQueue = () => {
                                 className="btn btn-primary"
                                 disabled={isSubmitting || !queueInfo.isOpen}
                             >
-                                {isSubmitting ? 'Joining Queue...' : 'Join Queue'}
+                                {isSubmitting ? 'Joining Queue...' : `Join ${queueInfo.name}`}
                             </button>
                         </div>
                     </form>

@@ -1,17 +1,22 @@
 import express from "express";
 import mongoose from "mongoose";
-// mongoose.models = {};
-// mongoose.modelSchemas = {};
 import cors from "cors";
 import dotenv from "dotenv";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import queueRoutes from "./routes/queueRoutes.js";
 
-dotenv.config();
+// FIXED: Load .env.local first, then .env as fallback
+dotenv.config({ path: '.env.local' });  // Try .env.local first
+dotenv.config();                        // Then .env as fallback (only loads missing variables)
 
 const app = express();
 const httpServer = createServer(app);
+
+// Add debug logging to see which MONGO_URI is being used
+console.log('🔧 Environment:', process.env.NODE_ENV);
+console.log('🔧 MongoDB URI source:', process.env.MONGO_URI?.includes('localhost') ? 'LOCAL (.env)' : 'ATLAS (.env.local)');
+console.log('🔧 Port:', process.env.PORT)
 
 const io = new Server(httpServer, {
     cors: {
