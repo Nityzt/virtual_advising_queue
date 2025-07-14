@@ -11,7 +11,7 @@ const AdminDashboard = () => {
   const [socket, setSocket] = useState(null);
   const navigate = useNavigate();
 
-  const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://virtual-advising-queue.onrender.com';
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://virtual-advising-queue.onrender.com' || 'http://localhost:5001' ;
 
   useEffect(() => {
     const storedAdminInfo = localStorage.getItem('adminInfo');

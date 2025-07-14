@@ -17,7 +17,7 @@ const StudentQueue = () => {
     const [currentQueueLength, setCurrentQueueLength] = useState(0);
 
     // Mock API base URL
-    const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://virtual-advising-queue.onrender.com';
+    const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://virtual-advising-queue.onrender.com' || 'http://localhost:5001';
 
     // Mock queue data - in real app, this would come from your backend
     const mockQueues = {
