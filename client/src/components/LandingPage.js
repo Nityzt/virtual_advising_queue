@@ -35,7 +35,7 @@ const LandingPage = () => {
                         <ul>
                             <li>View available queues</li>
                             <li>Join queues with your details</li>
-                            <li>Track your position and wait time</li>
+                            <li>Track your wait time</li>
                             <li>Defer your appointment if needed</li>
                         </ul>
                     </div>
